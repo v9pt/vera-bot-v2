@@ -29,12 +29,12 @@ app = FastAPI(title="Vera bot", version="2.0")
 _pool = ThreadPoolExecutor(max_workers=4)
 
 
-@app.get("/")
+@app.api_route("/", methods=["GET", "HEAD"])
 def home():
     return {"service": "Vera bot", "status": "running", "version": "2.0", "health": "/v1/healthz", "metadata": "/v1/metadata"}
 
 
-@app.get("/v1/healthz")
+@app.api_route("/v1/healthz", methods=["GET", "HEAD"])  # uptime monitors send HEAD
 def healthz():
     return {"status": "ok", "uptime_seconds": int(time.time() - START_TIME), "contexts_loaded": store.counts()}
 

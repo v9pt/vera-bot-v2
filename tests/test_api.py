@@ -172,3 +172,9 @@ def test_healthz_responsive_during_slow_tick(client, seed_categories, seed_merch
     assert client.get("/v1/healthz").status_code == 200
     assert time.time() - t0 < 1.0
     th.join()
+
+
+def test_head_allowed_for_uptime_monitors(client):
+    """UptimeRobot and similar monitors probe with HEAD; a 405 marks the bot as down."""
+    for path in ("/", "/v1/healthz"):
+        assert client.head(path).status_code == 200
